@@ -2,10 +2,6 @@ package jfgServerExample.basicExample;
 
 import java.io.IOException;
 
-import net.jfabricationgames.jfgserver.client.JFGClientMessage;
-import net.jfabricationgames.jfgserver.client.JFGServerMessage;
-import net.jfabricationgames.jfgserver.interpreter.JFGServerInterpreter;
-import net.jfabricationgames.jfgserver.server.JFGConnection;
 import net.jfabricationgames.jfgserver.server.JFGEchoServer;
 
 public class ServerMainExample {
@@ -29,26 +25,7 @@ public class ServerMainExample {
 		//messages sent to the echo server will only be echoed if they implement JFGServerMessage AND JFGClientMessage.
 		//if you need to echo the messages in another way you need to create your own implementation of JFGServerInterpreter
 		//and add it to the server:
-		server.setInterpreterFactory(new JFGServerInterpreter() {
-			@Override
-			public void interpreteServerMessage(JFGServerMessage message, JFGConnection connection) {
-				//do something that echoes the received messages here
-				if (message instanceof JFGClientMessage) {
-					connection.sendMessage((JFGClientMessage) message);
-					System.out.println("Echoed message.");
-				}
-				else {
-					System.err.println("Can't echo the message. It doesn't implement JFGClientMessage.");
-				}
-			}
-			@Override
-			public JFGServerInterpreter getInstance() {
-				//return a new independent instance of this class here
-				
-				//return this is not always an independent instance and should be used only if the implementation contains no fields.
-				return this;
-			}
-		});
+		server.setInterpreterFactory(new BasicServerInterpreter());
 		
 		//anyways creating a new interpreter and adding it to the echo server would not really fit the sense of the echo server
 		//because that overwrites the only implementation of this class...

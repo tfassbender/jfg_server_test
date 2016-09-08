@@ -1,7 +1,6 @@
-package jfgServerExample.basicExample;
+package jfgServerExample.groupServer;
 
 import net.jfabricationgames.jfgserver.client.JFGClient;
-import net.jfabricationgames.jfgserver.interpreter.JFGClientInterpreter;
 
 public class ClientMainExample {
 	
@@ -19,34 +18,40 @@ public class ClientMainExample {
 	 * Create the ClientMainExample that contains the client side connection to the server.
 	 */
 	public ClientMainExample() {
-		//create a new JFGClient that connects to the echo server from the example in basicExample.ServerMainExample
+		//create a new JFGClient that connects to the group server from the example in groupServer.ServerMainExample
 		//String host = "jfabricationgames.ddns.net";//could be any other port also
 		String host = "localhost";//could be any other port also
 		int port = 4711;//the port needs to be the same as set in the server to correctly connect.
-		JFGClientInterpreter interpreter = new BasicClientInterpreter();
+		GroupClientInterpreter interpreter = new GroupClientInterpreter();
 		JFGClient client = new JFGClient(host, port, interpreter);
 		System.out.println("client started");
 		//using the JFGClient(String, int, JFGClientInterpreter) constructor the client is created and started directly.
 		//by using another constructor without the JFGClientInterpreter the client would not be started until it gets
 		//a client interpreter by the JFGClient.setClientInterpreter(JFGClientInterpreter) method.
 		
-		//after the client is created and started you can send messages to the server.
-		//the messages sent have to implement JFGServerMessage to be interpreted by the server (like BasicMessage in this example).
-		BasicMessage message = new BasicMessage("The Answer is:", 42);
-		client.sendMessage(message);
+		//after the client is created and started you have to wait until the server created a group.
+		//the group is created as soon as there are enough connections (3 in this example).
+		//when the group is created it sends a message to the client telling him that the group was created and he may now 
+		//start to send what ever he wants.
+		//This message is send by the default implementation in the group server but is to be implemented by you if you 
+		//create your own server interpreter
 		
-		//the message is send to the server and interpreted (and in this example echoed).
-		//after the server answered to the message (what doesn't need to happen depending on your implementation of the 
-		//JFGServerInterpreter) the message this client received from the server is printed on the screen because that's what
-		//our implementation of the JFGClientInterpreter does in this example.
 		
-		//If a message is send to the server that couldn't be interpreted correctly by the servers interpreter, in this example
-		//the server will just print a message and don't send anything back to the client:
-		client.sendMessage(new BasicExampleMessageNoEcho());
+		//the message in this example is not send here but from the GroupClientInterpreter when the group is created.
 		
-		//WARNING: local classes should not be used here because they don't seem to be serializable.
 		
-		//after sending the message it takes a short time for the server to get the message and echo it.
+		//after the client was created you first have to wait until the group is created to send and receive the messages:
+		while (!interpreter.isEnabled()) {
+			try {
+				//wait for the group to be created.
+				Thread.sleep(100);
+			}
+			catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+		}
+		
+		//after sending the message it takes a short time for the server to get the message and react to it.
 		//so if you want to receive a message you need to wait.
 		try {
 			//one second should be more than enough.
