@@ -37,6 +37,12 @@ public class ClientMainExample {
 		//create your own server interpreter
 		
 		
+		//If you start all the clients from one computer and they try to use the same socket on the same port it probably will
+		//cause the program to throw an exception because the data couldn't read all objects on the same socket correctly.
+		//So in most cases if you start all the connections on one computer a java.io.StreamCorruptedException or a 
+		//java.io.EOFException will occur, causing the program to crash.
+		
+		
 		//the message in this example is not send here but from the GroupClientInterpreter when the group is created.
 		
 		
