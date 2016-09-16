@@ -37,7 +37,8 @@ public class DefaultLoginServerInterpreter implements JFGServerInterpreter {
 				else {
 					//deny login
 					failedLogins++;
-					if (failedLogins > loginTries) {
+					if (loginTries != -1 && failedLogins > loginTries) {
+						//to many failed logins
 						connection.sendMessage(loginDenied);
 						server.denyLogin(connection);
 					}
@@ -50,9 +51,15 @@ public class DefaultLoginServerInterpreter implements JFGServerInterpreter {
 				System.err.println("DefaultLoginServerInterpreter: User is already logged in.");
 			}
 		}
-		else {
+		else if (message instanceof DefaultMessage) {
 			//normal messages
-			//TODO
+			DefaultMessage textMessage = (DefaultMessage) message;
+			//just broadcast the messages to all logged in users.
+			server.sendBroadcast(textMessage);
+		}
+		else {
+			//unknown message type
+			System.err.println("The type of the message is unknown");
 		}
 	}
 	
