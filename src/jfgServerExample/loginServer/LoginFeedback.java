@@ -6,6 +6,15 @@ public class LoginFeedback implements JFGClientMessage {
 	
 	private static final long serialVersionUID = -1253479429717697886L;
 	
+	/**
+	 * The login is wrong.
+	 */
+	public static final int ERROR_WRONG_LOGIN = 1;
+	/**
+	 * The connection is canceled because of too many failed logins.
+	 */
+	public static final int ERROR_CANCEL_LOGIN = 2;
+	
 	private boolean loginAccepted;
 	
 	private int errorCode;

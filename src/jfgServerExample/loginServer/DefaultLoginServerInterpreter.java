@@ -16,8 +16,8 @@ public class DefaultLoginServerInterpreter implements JFGServerInterpreter {
 	private String onlyPassword = "42";
 	
 	private static LoginFeedback loginAccepted = new LoginFeedback(true);
-	private static LoginFeedback loginWrong = new LoginFeedback(false, 1, "Wrong username or password");
-	private static LoginFeedback loginDenied = new LoginFeedback(false, 2, "To many failed logins. Connection ended.");
+	private static LoginFeedback loginWrong = new LoginFeedback(false, LoginFeedback.ERROR_WRONG_LOGIN, "Wrong username or password");
+	private static LoginFeedback loginDenied = new LoginFeedback(false, LoginFeedback.ERROR_CANCEL_LOGIN, "To many failed logins. Connection ended.");
 	
 	public DefaultLoginServerInterpreter(JFGLoginServer server) {
 		this.server = server;
@@ -54,7 +54,10 @@ public class DefaultLoginServerInterpreter implements JFGServerInterpreter {
 		else if (message instanceof DefaultMessage) {
 			//normal messages
 			DefaultMessage textMessage = (DefaultMessage) message;
+			//find the number of the connected user and send a broadcast of his message.
+			int user = connection.getServer().getConnections().indexOf(connection);
 			//just broadcast the messages to all logged in users.
+			textMessage.setMessage("User " + user + ": " + textMessage.getMessage());
 			server.sendBroadcast(textMessage);
 		}
 		else {

@@ -29,12 +29,23 @@ public class ClientMainExample {
 		//by using another constructor without the JFGClientInterpreter the client would not be started until it gets
 		//a client interpreter by the JFGClient.setClientInterpreter(JFGClientInterpreter) method.
 		
+		//after the client is created it needs to login
+		LoginMessage login;
+		if (Math.random() > 50) {
+			//login using the right user and password.
+			login = new LoginMessage("theAnswer", "42");
+		}
+		else {
+			//login using the wrong user and password to demonstrate this case.
+			login = new LoginMessage("wrongAnswer", "43");
+		}
+		client.sendMessage(login);
 		
 		//after sending the message it takes a short time for the server to get the message and react to it.
 		//so if you want to receive a message you need to wait.
 		try {
-			//one second should be more than enough.
-			Thread.sleep(1000);
+			//wait for 10 seconds to receive messages from possible connected users.
+			Thread.sleep(10000);
 		}
 		catch (InterruptedException ie) {
 			ie.printStackTrace();
