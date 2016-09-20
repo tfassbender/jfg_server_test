@@ -20,6 +20,7 @@ public class DefaultLoginClientInterpreter implements JFGClientInterpreter {
 				connection.sendMessage(toServer);
 			}
 			else if (loginMessage.getErrorCode() == LoginFeedback.ERROR_WRONG_LOGIN) {
+				System.err.println("Wrong login. I'll try again in 3 seconds.");
 				try {
 					Thread.sleep(3000);
 				}

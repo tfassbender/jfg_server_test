@@ -18,7 +18,9 @@ public class ServerMainExample {
 	 */
 	public ServerMainExample() {
 		//create the new JFGLoginServer instance that listens on port 4711 (could also be any other port > 1024)
-		JFGLoginServer server = new JFGLoginServer(4711);
+		JFGLoginServer server;
+		server = new JFGLoginServer(4711);
+		//server = new CustomLoginServer(4711);
 		
 		//the interpreter is implemented in DefaultLoginServerInterpreter.
 		server.setInterpreterFactory(new DefaultLoginServerInterpreter(server));

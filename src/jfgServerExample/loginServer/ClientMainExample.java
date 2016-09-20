@@ -24,14 +24,14 @@ public class ClientMainExample {
 		int port = 4711;//the port needs to be the same as set in the server to correctly connect.
 		DefaultLoginClientInterpreter interpreter = new DefaultLoginClientInterpreter();
 		JFGClient client = new JFGClient(host, port, interpreter);
-		System.out.println("client started");
+		System.out.println("client started\n");
 		//using the JFGClient(String, int, JFGClientInterpreter) constructor the client is created and started directly.
 		//by using another constructor without the JFGClientInterpreter the client would not be started until it gets
 		//a client interpreter by the JFGClient.setClientInterpreter(JFGClientInterpreter) method.
 		
 		//after the client is created it needs to login
 		LoginMessage login;
-		if (Math.random() > 50) {
+		if (Math.random() > 0.5) {
 			//login using the right user and password.
 			login = new LoginMessage("theAnswer", "42");
 		}
@@ -50,6 +50,7 @@ public class ClientMainExample {
 		catch (InterruptedException ie) {
 			ie.printStackTrace();
 		}
+		System.out.println("\nClient closed");
 		
 		//after the messages are sent and the connection to the server is no longer needed (probably when closing the program)
 		//the client should be closed:
